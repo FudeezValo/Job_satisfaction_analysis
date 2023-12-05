@@ -1,0 +1,60 @@
+---
+title: "R Notebook"
+output: 
+    html_notebook: default
+    pdf_document: default
+editor_options: 
+    markdown: 
+      wrap: 72
+---
+
+Independent-Sample- T-Test Testing whether average levels of job
+satisfaction between FT and PT employees are the same or not.
+H_0: mean(FT) = mean(PT) H_1: mean(FT) != mean(PT)
+
+```{r Data Loading}
+#loading data
+#install.packages("readxl")
+library(readxl)
+
+employee_data  <- read_excel('C:\\Users\\amitj\\OneDrive\\Desktop\\Project\\SPSSExampleIndependentSampleT_Test2.xlsx')
+
+```
+
+Normality Assumption H_0: data follows normal distribution H_1: data
+doesnt follow normality 
+
+```{r Shapiro-Wilk test}
+
+# assumption of normality - Shapiro-Wilk test
+
+# for part-time group
+shapiro_test_pt <- shapiro.test(employee_data$JobSatisfaction[employee_data$Employment == 1])
+
+
+# for full-time group
+shapiro_test_ft <- shapiro.test(employee_data$JobSatisfaction[employee_data$Employment == 2])
+
+shapiro_test_pt
+shapiro_test_ft
+```
+Homogenity of Variance Assumption H_0: var(PT) = var(FT) H_1: var(PT) != var(FT)
+
+```{r}
+#assumptions of Homogenity of variances
+var_test <- var.test(JobSatisfaction ~ Employment, data = employee_data)
+
+var_test
+```
+
+Running T-Test H_0: mean(PT) = mean(FT) H_1: mean(PT) != mean(FT)
+
+```{r}
+#running the t-test
+t_test <- t.test(JobSatisfaction ~ Employment, var.equal = TRUE, data = employee_data)
+
+t_test
+
+```
+
+
